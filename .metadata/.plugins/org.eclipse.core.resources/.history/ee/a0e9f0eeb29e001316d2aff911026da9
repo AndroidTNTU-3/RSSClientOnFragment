@@ -1,0 +1,48 @@
+package android.edu.rss;
+
+import com.example.rssclient.R;
+
+import android.app.Activity;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.TextView;
+
+public class DetailActivity extends FragmentActivity {
+	WebView web;
+	WebViewClient webclient;
+	String url = "";
+	
+	 @Override
+     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        DetailFragment fragment = (DetailFragment)getFragmentManager().findFragmentById(R.id.detailFragment);
+
+        
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            finish();
+            return;
+        }
+        setContentView(R.layout.details_activity_layout);
+		Bundle extras = getIntent().getExtras();
+		url = extras.getString("url");
+
+        fragment.init(url);
+		web = (WebView) findViewById(R.id.webView);
+        web.loadUrl(url);
+        web.getSettings().setJavaScriptEnabled(true);
+        web.setWebViewClient(webclient);
+                        
+     }
+	 
+	 private class Webclient extends WebViewClient{
+			@Override
+	        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+	            view.loadUrl(url);
+	            return false;
+	        }
+	 }
+
+}

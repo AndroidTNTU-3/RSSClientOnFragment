@@ -1,0 +1,72 @@
+package android.edu.rss;
+
+import com.example.rssclient.R;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.edu.rss.FragmentList.Callbacks;
+import android.util.Log;
+import android.view.Menu;
+
+public class MainActivity extends Activity implements Callbacks {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public void onItemSelected(String link) {
+
+        /*DetailFragment fragment = (DetailFragment)getFragmentManager().findFragmentById(R.id.detailFragment);
+        fragment.init(link);
+        
+        if (fragment != null && fragment.isInLayout()) {
+  		 fragment.updateLink(link);
+    	 } else {
+    	Log.i("URL:", link);
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("url", link);
+
+        startActivity(intent);
+		
+    	 }*/
+		
+		if (findViewById(R.id.fragPage) != null) {        
+			DetailFragment fragment = (DetailFragment) getFragmentManager().findFragmentById(R.id.fragPage);
+			
+			if (fragment == null) {  
+				
+				System.out.println("Dual fragment - 1");            
+				fragment = new DetailFragment();            
+				fragment.init(link);            // We are in dual fragment (Tablet and so on)            
+				FragmentManager fm = getFragmentManager();            
+				FragmentTransaction ft = fm.beginTransaction(); //wvf.updateUrl(link);            
+				ft.replace(R.id.fragPage, fragment);            
+				ft.commit();
+				
+			} else {         
+				Log.d("SwA", "Dual Fragment update");         
+				fragment.updateLink(link);       
+			}    
+			
+		}    else {        
+				System.out.println("Start Activity");        
+				Intent intent = new Intent(this, DetailActivity.class);        
+				intent.putExtra("link", link);        
+				startActivity(intent);
+			}
+
+	}
+}

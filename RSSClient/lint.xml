@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="NewApi">
+        <ignore path="src/android/edu/rss/DetailActivity.java" />
+        <ignore path="src/android/edu/rss/DetailFragment.java" />
+        <ignore path="src/android/edu/rss/FragmentList.java" />
+        <ignore path="src/android/edu/rss/ListFragments.java" />
+        <ignore path="src/android/edu/rss/MainActivity.java" />
+    </issue>
+    <issue id="SetJavaScriptEnabled">
+        <ignore path="src/android/edu/rss/DetailActivity.java" />
+        <ignore path="src/android/edu/rss/DetailFragment.java" />
+    </issue>
+</lint>

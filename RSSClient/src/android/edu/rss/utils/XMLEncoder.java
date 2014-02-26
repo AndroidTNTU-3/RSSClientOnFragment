@@ -1,0 +1,112 @@
+package android.edu.rss.utils;
+
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * An encoder useful for converting text to be used within XML attribute values.
+ * The following translations will be performed:
+ * <table cellspacing="0" cellpadding="1" border="1">
+ * <tr>
+ * <th>Raw (Unencoded)<br/>
+ * Character</th>
+ * <th>Translated (Encoded)<br/>
+ * Entity</th>
+ * </tr>
+ * <tr>
+ * <td>&amp;</td>
+ * <td>&amp;amp;</td>
+ * </tr>
+ * <tr>
+ * <td>&lt;</td>
+ * <td>&amp;lt;</td>
+ * </tr>
+ * <tr>
+ * <td>&gt;</td>
+ * <td>&amp;gt;</td>
+ * </tr>
+ * <tr>
+ * <td>&quot;</td>
+ * <td>&amp;quot;</td>
+ * </tr>
+ * <tr>
+ * <td>&#039;</td>
+ * <td>&amp;#039;</td>
+ * </tr>
+ * <tr>
+ * <td>All Others</td>
+ * <td>No Translation</td>
+ * </tr>
+ * </table>
+ * </p>
+ */
+public class XMLEncoder {
+
+	private static final Map<String, Character> SPECIAL_ENTITIES;
+
+	static {
+		SPECIAL_ENTITIES = new HashMap<String, Character>();
+
+		SPECIAL_ENTITIES.put("quot", '"');
+		SPECIAL_ENTITIES.put("gt", '>');
+		SPECIAL_ENTITIES.put("lt", '<');
+		SPECIAL_ENTITIES.put("amp", '&');
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.jboss.dna.common.text.TextDecoder#decode(java.lang.String)
+	 */
+	public static String decode(String encodedText) {
+		if (encodedText == null)
+			return null;
+		StringBuilder sb = new StringBuilder();
+		CharacterIterator iter = new StringCharacterIterator(encodedText);
+		for (char c = iter.first(); c != CharacterIterator.DONE; c = iter
+				.next()) {
+			if (c == '&') {
+				int index = iter.getIndex();
+
+				do {
+					c = iter.next();
+				} while (c != CharacterIterator.DONE && c != ';');
+
+				// We found a closing semicolon
+				if (c == ';') {
+					String s = encodedText
+							.substring(index + 1, iter.getIndex());
+
+					if (SPECIAL_ENTITIES.containsKey(s)) {
+						sb.append(SPECIAL_ENTITIES.get(s));
+						continue;
+
+					}
+
+					if (s.length() > 0 && s.charAt(0) == '#') {
+						try {
+							sb.append((char) Short.parseShort(s.substring(1,
+									s.length())));
+							continue;
+						} catch (NumberFormatException nfe) {
+							// This is possible in malformed encodings, but let
+							// it fall through
+						}
+					}
+				}
+
+				// Malformed encoding, restore state and pass poorly encoded
+				// data back
+				c = '&';
+				iter.setIndex(index);
+			}
+
+			sb.append(c);
+
+		}
+		return sb.toString();
+	}
+}
