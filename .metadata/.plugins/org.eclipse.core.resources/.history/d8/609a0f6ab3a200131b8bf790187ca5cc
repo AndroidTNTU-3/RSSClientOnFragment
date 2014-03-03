@@ -13,29 +13,23 @@ import android.view.Menu;
 
 public class MainActivity extends Activity implements Callbacks {
 	FragmentList fragmentList;
-	FragmentManager fManager;
-	FragmentTransaction fTrans;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		if (findViewById(R.id.fragMainPage) != null){
-			
 		fragmentList = new FragmentList();
-		fManager = getFragmentManager();
+		FragmentManager fm = getFragmentManager();
 		
-		fTrans = fManager.beginTransaction();
-		fTrans.add(R.id.fragMainPage, fragmentList);
-		fTrans.commit();
-		
-		}
+		FragmentTransaction ft = fm.beginTransaction();
+		ft.add(R.id.fragMainPage, fragmentList);
+		ft.commit();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
+		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -49,16 +43,16 @@ public class MainActivity extends Activity implements Callbacks {
 			
 			if (fragment == null) {  
 				
-				Log.i("Data transaction", "This is dual fragment");            
+				System.out.println("Dual fragment - 1");            
 				fragment = new DetailFragment();            
-				fragment.init(link);            // in dual fragment 
+				fragment.init(link);            // We are in dual fragment (Tablet and so on)            
 				FragmentManager fm = getFragmentManager();            
-				FragmentTransaction ft = fm.beginTransaction();   
+				FragmentTransaction ft = fm.beginTransaction(); //wvf.updateUrl(link);            
 				ft.replace(R.id.fragPage, fragment);            
 				ft.commit();
 				
 			} else {         
-				Log.i("Data transaction", "Dual Fragment update");         
+				Log.d("SwA", "Dual Fragment update");         
 				fragment.updateLink(link);       
 			}    
 			
@@ -68,14 +62,14 @@ public class MainActivity extends Activity implements Callbacks {
 				intent.putExtra("link", link);        
 				startActivity(intent);*/
 			
-			DetailFragment df = new DetailFragment();
-
+			//DetailFragment df = new DetailFragment();
+			DetailFragment df = (DetailFragment) getFragmentManager().findFragmentById(R.id.fragMainPage);
+			FragmentManager fm = getFragmentManager();
 			df.init(link); 
-				
-			fTrans = fManager.beginTransaction();
-			fTrans.replace(R.id.fragMainPage, df);
-			fTrans.addToBackStack(null);
-			fTrans.commit();
+			FragmentTransaction ft = fm.beginTransaction();
+			ft.replace(R.id.fragMainPage, df);
+			ft.addToBackStack(null); 
+			ft.commit();
 			
 			}
 

@@ -24,7 +24,7 @@ public class DetailFragment extends Fragment{
 	public void init(String url) {
 
 		curUrl = url;
-		Log.i("Data transaction: ", curUrl);
+		Log.i("URRR:", curUrl);
 		
     }
 		 	
@@ -43,7 +43,9 @@ public class DetailFragment extends Fragment{
       
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-       
+
+            //обязательно нужно реализовывать, тут мы показываем какую разметку используем
+            //так же здесь можно переопределять елементы, findViewByID и остальное делается так view.findViewById...
             View view = inflater.inflate(R.layout.detail, container, false);
             if (curUrl != null) {
             WebView web = (WebView) view.findViewById(R.id.webView);

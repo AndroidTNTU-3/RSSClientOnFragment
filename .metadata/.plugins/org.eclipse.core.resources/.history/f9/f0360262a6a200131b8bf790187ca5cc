@@ -5,17 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <!-- <fragment
+    <fragment
         android:id="@+id/listFragment"
         android:name="android.edu.rss.FragmentList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/list" >
-    </fragment> -->
-    
-     <FrameLayout android:id="@+id/fragMainPage"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"  
-    />
+    </fragment>
 
 </LinearLayout>
