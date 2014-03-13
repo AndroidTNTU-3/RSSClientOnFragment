@@ -47,7 +47,7 @@ public class DetailFragment extends Fragment{
             View view = inflater.inflate(R.layout.detail, container, false);
             if (curUrl != null) {
             WebView web = (WebView) view.findViewById(R.id.webView);
-    		web.setWebViewClient(webclient);
+    		web.setWebViewClient(new Webclient());
     		web.getSettings().setJavaScriptEnabled(true);
             web.loadUrl(curUrl);
             }
